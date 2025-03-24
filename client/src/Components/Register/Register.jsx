@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../AuthProvider/AuthProvider";
 
 const Register = () => {
+  const authInfo = useContext(AuthContext);
+  const { registerUser } = authInfo;
+  const [passwordMismatch, setPasswordMismatch] = useState();
+
   const handleRegister = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -10,6 +15,13 @@ const Register = () => {
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
     console.log(name, photo, email, password, confirmPassword);
+    if (password === confirmPassword) {
+      registerUser(email, password).then((result) => {
+        console.log(result.user);
+      });
+    } else {
+      setPasswordMismatch("Password Should be same");
+    }
   };
 
   return (
@@ -102,6 +114,9 @@ const Register = () => {
               className="mt-1 p-3 w-full bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 outline-none transition duration-200"
               required
             />
+          </div>
+          <div>
+            <p>{passwordMismatch}</p>
           </div>
 
           <div>
